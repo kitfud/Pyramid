@@ -20,7 +20,11 @@ next_card = pygame.sprite.GroupSingle()
 empty_deck = pygame.Rect(0,0,71,94)
 empty_deck.bottomleft = (20,height-20)
 
-
+font = pygame.font.SysFont("vivaldi", 100)
+font2 = pygame.font.SysFont("vivaldi", 50)
+restart_text = font2.render("Restart", True, (179, 0, 0))
+restart_rect = restart_text.get_rect()
+restart_rect.bottomright = (width-20, height-20)
 
 def check_remove(card_clicked):
   if len(selected_card) >0 and selected_card.sprite.rank + card_clicked.rank == 13:
@@ -39,6 +43,10 @@ def check_remove(card_clicked):
 def init():
   global deck
   deck = Deck()
+  board.empty() 
+  discard_pile.empty()
+  top_card.empty()
+  selected_card.empty()
   for i in range(7):
     for j in range(i+1):
       card = deck.deal()
@@ -74,9 +82,12 @@ def reset_pile():
   else:
     next_card.empty()
 
-    
+
 def check_sprite_clicked(x,y):
   card_clicked = None
+  if restart_rect.collidepoint(x,y):
+    init()
+    return
   if len(next_card)>0:
         if next_card.sprite.rect.collidepoint(x, y):
             selected_card.empty()
@@ -132,6 +143,14 @@ def main():
         pygame.draw.rect(screen,(204,173,0),selected_card.sprite.rect,3)
       if len(next_card)==0:
         pygame.draw.rect(screen,(0,0,0),empty_deck,3)
+        #line below, uncomment to test "you win text"
+        #board.empty()
+      if len(board) == 0:
+        win_text = font.render("You win!", True,(255,255,255))
+        win_rect = win_text.get_rect()
+        win_rect.center = (width//2,height//2)
+        screen.blit(win_text,win_rect)
+      screen.blit(restart_text,restart_rect)
       pygame.display.flip()
 
 if __name__ =="__main__":
