@@ -24,5 +24,5 @@ class Deck:
     for card in new_cards:
       if card.faceup:
         card.flip()
-      self.card.insert(0,card)
+      self.cards.insert(0,card)
   
